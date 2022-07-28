@@ -1,4 +1,4 @@
-setTimeout(mostrarCarga, 25000);
+setTimeout(mostrarCarga, 40000);
 
 function mostrarCarga(){
     document.getElementById("divLoader").style.display = 'none';

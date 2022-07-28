@@ -31,6 +31,7 @@ router.get('/downloadFile', function (req, res, next) {
 
 router.post('/downloadFile', function (req, res) {
   //res.send(req.body);
+  array = [];
   console.log(req.body);
   if (req.body.selectPais != "") {
     consulta = "&country=" + req.body.selectPais;
@@ -89,7 +90,7 @@ router.post('/downloadFile', function (req, res) {
       }
     }
 
-    setTimeout(mostrar, 20000);
+    setTimeout(mostrar, 30000);
   }).catch(function (error) {
     console.log("Error_log");
   })
@@ -126,7 +127,7 @@ function mostrar() {
 
   // Used to export the file into a .docx file
   Packer.toBuffer(doc).then((buffer) => {
-    console.log(__dirname);
+
     try {
       if (!fs.existsSync('public/files')) {
         console.log("no existe");
@@ -134,11 +135,12 @@ function mostrar() {
       } else {
         console.log("existe");
       }
-      //console.log(__dirname+"direccuibs");
       fs.writeFileSync("public/files/News.docx", buffer);
     } catch (err) {
+
       console.log(err);
     }
+
 
   });
 }
