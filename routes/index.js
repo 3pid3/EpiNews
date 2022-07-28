@@ -126,7 +126,20 @@ function mostrar() {
 
   // Used to export the file into a .docx file
   Packer.toBuffer(doc).then((buffer) => {
-    fs.writeFileSync("./public/files/News.docx", buffer);
+    console.log(__dirname);
+    try {
+      if (!fs.existsSync('public/files')) {
+        console.log("no existe");
+        fs.mkdirSync('public/files');
+      } else {
+        console.log("existe");
+      }
+      //console.log(__dirname+"direccuibs");
+      fs.writeFileSync("public/files/News.docx", buffer);
+    } catch (err) {
+      console.log(err);
+    }
+
   });
 }
 
