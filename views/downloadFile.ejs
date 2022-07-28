@@ -6,9 +6,10 @@
                 <a href="/" class="btn btn-success" style="color: white;">
                     <i class="bi bi-arrow-left"></i> Regresar
                 </a>
-                &nbsp;<br>&nbsp;<br>
+                &nbsp;&nbsp;&nbsp;
+                <br><br><br>
                 <div class="p-3 border bg-light">
-                    <div id="divLoader">
+                    <div id="divLoader"><br><br><br>
                         <div class="animation">
                             <span></span>
                             <span></span>
@@ -16,17 +17,46 @@
                             <span></span>
                             <span></span>
                         </div>
-                        <br><br><br>
+                        <br><br><br><br><br><br>
                     </div>
+
                     <div class="container" id="divContenido" style="display: none;">
-                        <div class="row" id="contenidoDescarga">
-                            <div class="col-sm-12 col-md-12 offset-md-3">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <div class="mb-3 text-center">
+                                    <h6>Búsqueda seleccionada:</h6>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="formControlPais" class="form-label">País</label>
+                                    <input type="text" name="opPaisEd" id="opPaisEd" class="form-control"
+                                        value='<%= opPais %>' disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="formControlIdioma" class="form-label">Idioma</label>
+                                    <input type="text" name="opIdiomaEd" id="opIdiomaEd" class="form-control"
+                                        value="<%= opIdioma %>" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="formControlCategoria" class="form-label">Categoría</label>
+                                    <input type="text" name="opCategoriaEd" id="opCategoriaEd" value="<%=opCategoria %>"
+                                        class="form-control" disabled>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="formControlPais" class="form-label">Buscar por palabra</label>
+                                    <input type="text" name="txtPalabra" class="form-control" id="formControlPalabra"
+                                        value="<%=opTexto%>" disabled>
+                                </div>
+                                <div class="mb-3 text-center">
+                                    <button type="button" class="btn btn-primary" disabled>
+                                      Buscar
+                                    </button>
+                                  </div>
+                            </div>
+                            <div class="col-sm-12 col-md-8 text-center">
                                 <div class="mb-3">
                                     <h4>Se ha generado el archivo correctamente</h4>
                                     &nbsp;<br>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6 offset-md-3">
                                 <div class="mb-3">
                                     <h5>Desea descargar el archivo word:</h5>
                                     <br>
@@ -42,7 +72,8 @@
                                         placeholder="name@example.com">
                                 </div>
                                 <div class="mb-3 text-center">
-                                    <button type="button" class="btn btn-primary" onclick="descargarArchivos();">Aceptar</button>
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="descargarArchivos();">Aceptar</button>
                                 </div>
                             </div>
                         </div>
@@ -52,4 +83,3 @@
         </div>
     </div>
     <%- include layouts/footer.ejs %>
-        <script src="/javascripts/loader.js"></script>

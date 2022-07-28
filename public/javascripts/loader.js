@@ -15,3 +15,24 @@ function descargarArchivos(){
     downloadInstance.click();
     document.body.removeChild(downloadInstance);
 }
+
+function cambiarPais(op){
+    var select = document.getElementById("selectPais"), //El <select>
+    value = select.value, //El valor seleccionado
+    text = select.options[select.selectedIndex].innerText; //El texto de la opción seleccionada 
+    document.getElementById("opPais").value = text;
+}
+
+function cambiarIdioma(){
+    var select = document.getElementById("selectIdioma"), //El <select>
+    value = select.value, //El valor seleccionado
+    text = select.options[select.selectedIndex].innerText; //El texto de la opción seleccionada 
+    document.getElementById("opIdioma").value = text;
+}
+
+function cambiarCategoria(){
+    var select = document.getElementById("selectCategoria"), //El <select>
+    value = select.value, //El valor seleccionado
+    text = select.options[select.selectedIndex].innerText; //El texto de la opción seleccionada 
+    document.getElementById("opCategoria").value = text;
+}

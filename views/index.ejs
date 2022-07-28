@@ -14,7 +14,7 @@
                 <form method="post" action="/downloadFile">
                   <div class="mb-3">
                     <label for="formControlPais" class="form-label">País</label>
-                    <select class="form-select" name="selectPais" aria-label="Default select example">
+                    <select class="form-select" name="selectPais" id="selectPais" aria-label="Default select example" onchange="cambiarPais(this.value);">
                       <option value="">Todos los paises</option>
                       <option value="de">Alemania</option>
                       <option value="sa">Arabia Saudita</option>
@@ -71,10 +71,11 @@
                       <option value="ve">Venezuela</option>
 
                     </select>
+                    <input type="hidden" name="opPais" id="opPais" value="México">
                   </div>
                   <div class="mb-3">
                     <label for="formControlIdioma" class="form-label">Idioma</label>
-                    <select class="form-select" name="selectIdioma" aria-label="Default select example">
+                    <select class="form-select" name="selectIdioma" id="selectIdioma" aria-label="Default select example" onchange="cambiarIdioma();">
                       <option value="">Todos los idiomas</option>
                       <option value="de">Alemán</option>
                       <option value="ar">Árabe</option>
@@ -90,10 +91,11 @@
                       <option value="ru">Ruso</option>
                       <option value="sv">Sueco</option>
                     </select>
+                    <input type="hidden" name="opIdioma" id="opIdioma" value="Español">
                   </div>
                   <div class="mb-3">
                     <label for="formControlCategoria" class="form-label">Categoría</label>
-                    <select class="form-select" name="selectCategoria" aria-label="Default select example">
+                    <select class="form-select" name="selectCategoria" id="selectCategoria" aria-label="Default select example" onchange="cambiarCategoria();">
                       <option value="">Todas las categorias</option>
                       <option value="science">Ciencia</option>
                       <option value="sports">Deportes</option>
@@ -103,6 +105,7 @@
                       <option value="health" selected>Salud</option>
                       <option value="technology">Tecnología</option>
                     </select>
+                    <input type="hidden" name="opCategoria" id="opCategoria" value="Salud">
                   </div>
                   <div class="mb-3">
                     <label for="formControlPais" class="form-label">Buscar por palabra</label>
@@ -116,40 +119,7 @@
                 </form>
               </div>
             </div>
-            <div class="row" style="display: none;" id="contenidoCarga">
-              <div class="d-flex justify-content-center">
-                <div class="spinner-border text-info" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </div>
-            </div>
-            <div class="row" style="display: none;" id="contenidoDescarga">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td width="50%" class="text-left">
-                      <button type="button" class="btn btn-info" style="color: white;" onclick="regresar();">
-                        <i class="bi bi-arrow-left"></i> Regresar</button>
-                      <br>
-                      <br>
-                      <br>
-                      <div class="text-center">
-                        <button type="button" class="btn btn-primary">Descargar</button>
-                      </div>
-                    </td>
-                    <td width="50%">
-                      <div class="mb-3">
-                        <label for="frmCorreo" class="form-label">Enviar por correo</label>
-                        <input type="email" class="form-control" id="txtCorreo" placeholder="name@example.com">
-                      </div>
-                      <div class="mb-3">
-                        <button type="button" class="btn btn-primary">Enviar</button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+           
           </div>
         </div>
       </div>

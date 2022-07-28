@@ -20,19 +20,26 @@ let titulo;
 
 var array = [];
 var consulta = "";
+var pais = "", idioma = "", categoria = "", texto = "";
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'News' });
 });
 
 router.get('/downloadFile', function (req, res, next) {
-  res.render('downloadFile', { title: 'Download' });
+  res.render('downloadFile', { title: 'Download', opPais: pais, opIdioma: idioma, opCategoria: 
+  categoria, opTexto: texto });
 });
 
 router.post('/downloadFile', function (req, res) {
   //res.send(req.body);
   array = [];
   console.log(req.body);
+  pais = req.body.opPais;
+  idioma = req.body.opIdioma;
+  categoria = req.body.opCategoria;
+  texto = req.body.txtPalabra;
+
   if (req.body.selectPais != "") {
     consulta = "&country=" + req.body.selectPais;
   }
