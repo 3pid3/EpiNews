@@ -50,6 +50,7 @@ router.post('/downloadFile', function (req, res) {
 
   let url = 'https://newsapi.org/v2/top-headlines?pageSize=100' + consulta + '&apiKey=b7767b490e2b4184bd68896e9ddc92af';
 
+  console.log(url);
   // Make the request with axios' get() function
   axios.get(url).then(function (r1) {
     let firstResult;
