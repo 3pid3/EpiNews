@@ -1,0 +1,55 @@
+<%- include layouts/header.ejs %>
+
+    <div class="container px-4">
+        <div class="row gx-5">
+            <div class="col">
+                <a href="/" class="btn btn-success" style="color: white;">
+                    <i class="bi bi-arrow-left"></i> Regresar
+                </a>
+                &nbsp;<br>&nbsp;<br>
+                <div class="p-3 border bg-light">
+                    <div id="divLoader">
+                        <div class="animation">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                        <br><br><br>
+                    </div>
+                    <div class="container" id="divContenido" style="display: none;">
+                        <div class="row" id="contenidoDescarga">
+                            <div class="col-sm-12 col-md-12 offset-md-3">
+                                <div class="mb-3">
+                                    <h4>Se ha generado el archivo correctamente</h4>
+                                    &nbsp;<br>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 offset-md-3">
+                                <div class="mb-3">
+                                    <h5>Desea descargar el archivo word:</h5>
+                                    <br>
+                                    <!-- <select class="form-select" aria-label="Default select"
+                                        onchange="cambiarSeleccion(this.value);">
+                                        <option value="descargar">Descargar documento word</option>
+                                        <option value="enviar">Enviar archivo por correo</option>
+                                    </select>-->
+                                </div>
+                                <div class="mb-3" id="idEnvioCorreo" style="display: none;">
+                                    <label for="frmCorreo" class="form-label">Ingresa el correo</label>
+                                    <input type="email" class="form-control" id="txtCorreo"
+                                        placeholder="name@example.com">
+                                </div>
+                                <div class="mb-3 text-center">
+                                    <button type="button" class="btn btn-primary" onclick="descargarArchivos();">Aceptar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include layouts/footer.ejs %>
+        <script src="/javascripts/loader.js"></script>

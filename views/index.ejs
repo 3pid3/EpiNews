@@ -1,0 +1,158 @@
+<%- include layouts/header.ejs %>
+  <div class="container px-4">
+    <div class="row gx-5">
+      <div class="col">
+        <div class="p-3 border bg-light">
+          <div class="container">
+            <div class="row" id="contenidoGenerar">
+              <div class="col-sm-12 col-md-7">
+                <div class="text-center">
+                  <img src="/images/new-g6.png" class="rounded" alt="news" width="50%">
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-5">
+                <form method="post" action="/downloadFile">
+                  <div class="mb-3">
+                    <label for="formControlPais" class="form-label">País</label>
+                    <select class="form-select" name="selectPais" aria-label="Default select example">
+                      <option value="">Todos los paises</option>
+                      <option value="de">Alemania</option>
+                      <option value="sa">Arabia Saudita</option>
+                      <option value="ar">Argentina</option>
+                      <option value="au">Australia</option>
+                      <option value="at">Austria</option>
+                      <option value="be">Bélgica</option>
+                      <option value="br">Brasil</option>
+                      <option value="bg">Bulgaria</option>
+                      <option value="ca">Canadá</option>
+                      <option value="cn">China</option>
+                      <option value="co">Colombia</option>
+                      <option value="kr">Corea</option>
+                      <option value="cu">Cuba</option>
+                      <option value="eg">Egipto</option>
+                      <option value="ae">Emiratos Árabes Unidos</option>
+                      <option value="sk">Eslovaquia</option>
+                      <option value="si">Eslovenia</option>
+                      <option value="us">Estados Unidos</option>
+                      <option value="ru">Federacion Rusa</option>
+                      <option value="ph">Filipinas</option>
+                      <option value="fr">Francia</option>
+                      <option value="gr">Grecia</option>
+                      <option value="hk">Hong Kong</option>
+                      <option value="hu">Hungría</option>
+                      <option value="in">India</option>
+                      <option value="id">Indonesia</option>
+                      <option value="ie">Irlanda</option>
+                      <option value="il">Israel</option>
+                      <option value="it">Italia</option>
+                      <option value="jp">Japón</option>
+                      <option value="lv">Letonia</option>
+                      <option value="lt">Lituania</option>
+                      <option value="my">Malasia</option>
+                      <option value="ma">Marruecos</option>
+                      <option value="mx" selected>México</option>
+                      <option value="ng">Nigeria</option>
+                      <option value="no">Noruega</option>
+                      <option value="nz">Nueva Zelanda</option>
+                      <option value="nl">Países Bajos</option>
+                      <option value="pl">Polonia</option>
+                      <option value="pt">Portugal</option>
+                      <option value="cz">República Checa</option>
+                      <option value="ro">Rumania</option>
+                      <option value="rs">Serbia</option>
+                      <option value="sg">Singapur</option>
+                      <option value="se">Suecia</option>
+                      <option value="za">Sudáfrica</option>
+                      <option value="ch">Suiza</option>
+                      <option value="th">Tailandia</option>
+                      <option value="tw">Taiwán</option>
+                      <option value="tr">Turquía</option>
+                      <option value="ua">Ucrania</option>
+                      <option value="ve">Venezuela</option>
+
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="formControlIdioma" class="form-label">Idioma</label>
+                    <select class="form-select" name="selectIdioma" aria-label="Default select example">
+                      <option value="">Todos los idiomas</option>
+                      <option value="de">Alemán</option>
+                      <option value="ar">Árabe</option>
+                      <option value="zh">Chino</option>
+                      <option value="es" selected>Español</option>
+                      <option value="fr">Francés</option>
+                      <option value="he">Hebreo</option>
+                      <option value="it">Italiano</option>
+                      <option value="en">Ingles</option>
+                      <option value="nl">Neerlandes</option>
+                      <option value="no">Noruego</option>
+                      <option value="pt">Portugués</option>
+                      <option value="ru">Ruso</option>
+                      <option value="sv">Sueco</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="formControlCategoria" class="form-label">Categoría</label>
+                    <select class="form-select" name="selectCategoria" aria-label="Default select example">
+                      <option value="">Todas las categorias</option>
+                      <option value="science">Ciencia</option>
+                      <option value="sports">Deportes</option>
+                      <option value="entertainment">Entretenimiento</option>
+                      <option value="general">General</option>
+                      <option value="business">Negocios</option>
+                      <option value="health" selected>Salud</option>
+                      <option value="technology">Tecnología</option>
+                    </select>
+                  </div>
+                  <div class="mb-3">
+                    <label for="formControlPais" class="form-label">Buscar por palabra</label>
+                    <input type="text" name="txtPalabra" class="form-control" id="formControlPalabra">
+                  </div>
+                  <div class="mb-3 text-center">
+                    <button type="submit" class="btn btn-primary">
+                      Buscar
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="row" style="display: none;" id="contenidoCarga">
+              <div class="d-flex justify-content-center">
+                <div class="spinner-border text-info" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+            <div class="row" style="display: none;" id="contenidoDescarga">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td width="50%" class="text-left">
+                      <button type="button" class="btn btn-info" style="color: white;" onclick="regresar();">
+                        <i class="bi bi-arrow-left"></i> Regresar</button>
+                      <br>
+                      <br>
+                      <br>
+                      <div class="text-center">
+                        <button type="button" class="btn btn-primary">Descargar</button>
+                      </div>
+                    </td>
+                    <td width="50%">
+                      <div class="mb-3">
+                        <label for="frmCorreo" class="form-label">Enviar por correo</label>
+                        <input type="email" class="form-control" id="txtCorreo" placeholder="name@example.com">
+                      </div>
+                      <div class="mb-3">
+                        <button type="button" class="btn btn-primary">Enviar</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%- include layouts/footer.ejs %>
