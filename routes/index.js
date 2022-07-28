@@ -126,7 +126,7 @@ function mostrar() {
 
   // Used to export the file into a .docx file
   Packer.toBuffer(doc).then((buffer) => {
-    fs.writeFileSync("public/files/News.docx", buffer);
+    fs.writeFileSync("./public/files/News.docx", buffer);
   });
 }
 
