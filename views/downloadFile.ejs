@@ -73,7 +73,8 @@
                                                         <!--row-->
                                                         <div class="card col-md-4">
                                                             <img src="<%= resultados[i].urlToImage %>"
-                                                                class="card-img-top" height="150px" alt="...">
+                                                                class="card-img-top" height="150px" alt="..."
+                                                                onError="this.onerror=null;this.src='/images/brokenFile.png';">
                                                             <div class="card-body">
                                                                 <h6 class="card-title">
                                                                     <b>
@@ -103,7 +104,7 @@
                                                                     <a class="btn btn-primary btn-sm" target="_blank"
                                                                         href="<%= resultados[i].url %>">Ver noticia</a>
 
-                                                                        &nbsp;&nbsp;
+                                                                    &nbsp;&nbsp;
                                                                     <a class="btn btn-warning btn-sm"
                                                                         style="color: white;" id="<%=i%>"
                                                                         onclick="enviarBoton(this)">Descargar</a>
@@ -111,7 +112,7 @@
                                                                 <div id="divBtnCarga_<%=i%>" style="display: none;">
                                                                     <a class="btn btn-primary btn-sm" target="_blank"
                                                                         href="<%= resultados[i].url %>">Ver noticia</a>
-                                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                                     <div class="spinner-border text-primary"
                                                                         role="status">
                                                                         <span class="visually-hidden">Loading...</span>
