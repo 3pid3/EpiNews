@@ -19,6 +19,7 @@ var fechaActual = fechaNu;
 let titulo;
 
 var array = [];
+var resultado = [];
 var consulta = "";
 var pais = "", idioma = "", categoria = "", texto = "";
 /* GET home page. */
@@ -26,9 +27,127 @@ router.get('/', function (req, res, next) {
   res.render('index', { title: 'News' });
 });
 
+//ruta para editar
+router.post('/downloadNew', function (req, res, next) {
+  //console.log(req.body);
+  const tituloFile = req.body.titulo;
+  const urlFile = req.body.url;
+  const fechaFile = req.body.fecha;
+  const descripcionFile = req.body.descripcion;
+  const contenidoFile = req.body.contenido;
+
+
+  //// ...and download the HTML for it, again with axios
+  axios.get(urlFile).then(function (r2) {
+    //// We now have the article HTML, but before we can use Readability to locate the article content we need jsdom to convert it into a DOM object
+    let dom = new JSDOM(r2.data, {
+      url: urlFile
+    });
+
+    //// now pass the DOM document into readability to parse
+    let article = new Readability(dom.window.document).parse();
+
+    //create the file
+    //console.log(article.textContent.trim());
+
+    
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+           
+            createParagraphTitle(tituloFile),
+            createParagraphUrl(urlFile),
+            createParagraphFecha(fechaFile),
+            createParagraphDescripcion(descripcionFile),
+            createParagraphResumen(contenidoFile),
+            createParagraphContenido(article.textContent.trim()),
+              
+          ],
+        },
+      ],
+    });
+  
+    // Used to export the file into a .docx file
+    Packer.toBuffer(doc).then((buffer) => {
+  
+      try {
+        if (!fs.existsSync('public/files')) {
+          console.log("no existe");
+          fs.mkdirSync('public/files');
+        } else {
+          console.log("existe");
+        }
+        fs.writeFileSync("public/files/New.docx", buffer);
+      } catch (err) {
+  
+        console.log(err);
+      }
+  
+  
+    });
+
+
+
+
+  }).catch(function (error) {
+
+    //-------------------------------------------------------------------------------------
+    // Documents contain sections, you can have multiple sections per document
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+           
+            createParagraphTitle(tituloFile),
+            createParagraphUrl(urlFile),
+            createParagraphFecha(fechaFile),
+            createParagraphDescripcion(descripcionFile),
+            createParagraphResumen(contenidoFile),
+              
+          ],
+        },
+      ],
+    });
+  
+    // Used to export the file into a .docx file
+    Packer.toBuffer(doc).then((buffer) => {
+  
+      try {
+        if (!fs.existsSync('public/files')) {
+          console.log("no existe");
+          fs.mkdirSync('public/files');
+        } else {
+          console.log("existe");
+        }
+        fs.writeFileSync("public/files/New.docx", buffer);
+      } catch (err) {
+  
+        console.log(err);
+      }
+  
+  
+    });
+
+    
+
+    //--------------------------------------------------------------------------------------------------
+
+  })
+
+
+  //----------------------------------------------------------------------------------------------
+
+  res.send("creado");
+});
+
 router.get('/downloadFile', function (req, res, next) {
-  res.render('downloadFile', { title: 'Download', opPais: pais, opIdioma: idioma, opCategoria: 
-  categoria, opTexto: texto });
+  res.render('downloadFile', {
+    title: 'Download', opPais: pais, opIdioma: idioma, opCategoria:
+      categoria, opTexto: texto, resultados: resultado, fecha: fechaActual
+  });
 });
 
 router.post('/downloadFile', function (req, res) {
@@ -61,6 +180,9 @@ router.post('/downloadFile', function (req, res) {
   console.log(url);
   // Make the request with axios' get() function
   axios.get(url).then(function (r1) {
+    resultado = r1.data.articles;
+    //console.log(r1.data.articles);
+
     let firstResult;
 
     for (let i = 0; i < r1.data.articles.length; i++) {
@@ -102,7 +224,12 @@ router.post('/downloadFile', function (req, res) {
     console.log("Error_log");
   })
 
-  res.redirect('/downloadFile');
+  //res.redirect('/downloadFile');
+
+  setTimeout(function () {
+    // after 10 seconds
+    res.redirect('/downloadFile');
+  }, 10000)
 });
 
 module.exports = router;

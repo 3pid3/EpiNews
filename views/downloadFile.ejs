@@ -19,65 +19,117 @@
                         </div>
                         <br><br><br><br><br><br>
                     </div>
-
                     <div class="container" id="divContenido" style="display: none;">
                         <div class="row">
-                            <div class="col-sm-12 col-md-4">
+                            <div class="col-sm-12 col-md-3">
                                 <div class="mb-3 text-center">
                                     <h6>Búsqueda seleccionada:</h6>
                                 </div>
                                 <div class="mb-3">
                                     <label for="formControlPais" class="form-label">País</label>
-                                    <input type="text" name="opPaisEd" id="opPaisEd" class="form-control"
+                                    <input type="text" name="opPaisEd6" id="opPaisEdh" class="form-control"
                                         value='<%= opPais %>' disabled>
                                 </div>
                                 <div class="mb-3">
                                     <label for="formControlIdioma" class="form-label">Idioma</label>
-                                    <input type="text" name="opIdiomaEd" id="opIdiomaEd" class="form-control"
+                                    <input type="text" name="opIdiomaEdj" id="opIdiomaEdh" class="form-control"
                                         value="<%= opIdioma %>" disabled>
                                 </div>
                                 <div class="mb-3">
                                     <label for="formControlCategoria" class="form-label">Categoría</label>
-                                    <input type="text" name="opCategoriaEd" id="opCategoriaEd" value="<%=opCategoria %>"
-                                        class="form-control" disabled>
+                                    <input type="text" name="opCategoriaEdh" id="opCategoriaEdh"
+                                        value="<%=opCategoria %>" class="form-control" disabled>
                                 </div>
                                 <div class="mb-3">
                                     <label for="formControlPais" class="form-label">Buscar por palabra</label>
-                                    <input type="text" name="txtPalabra" class="form-control" id="formControlPalabra"
+                                    <input type="text" name="txtPalabrah" class="form-control" id="formControlPalabra"
                                         value="<%=opTexto%>" disabled>
                                 </div>
-                                <div class="mb-3 text-center">
+                                <!--<div class="mb-3 text-center">
                                     <button type="button" class="btn btn-primary" disabled>
-                                      Buscar
+                                        Buscar
                                     </button>
-                                  </div>
+                                </div>-->
                             </div>
-                            <div class="col-sm-12 col-md-8 text-center">
-                                <div class="mb-3">
-                                    <h4>Se ha generado el archivo correctamente</h4>
-                                    &nbsp;<br>
+                            <div class="col-sm-12 col-md-9">
+
+                                <div class="mb-3 text-end">
+                                    <button type="button" class="btn btn-sm btn-primary"
+                                        onclick="descargarArchivos();">Descargar todas las noticias</button>
                                 </div>
-                                <div class="mb-3">
-                                    <h5>Desea descargar el archivo word:</h5>
-                                    <br>
-                                    <!-- <select class="form-select" aria-label="Default select"
-                                        onchange="cambiarSeleccion(this.value);">
-                                        <option value="descargar">Descargar documento word</option>
-                                        <option value="enviar">Enviar archivo por correo</option>
-                                    </select>-->
+
+                                <!--   <div class="d-md-flex justify-content-center">
+                                    <div class="overflow-auto p-3 mb-3 mb-md-0 mr-md-3 bg-light"
+                                        style="max-width: 100%; max-height: 300px;">
+                                -->
+                                <div class="card-group">
+                                    <div class="row">
+
+                                        <% if(resultados.length==0){%>
+                                            &nbsp;&nbsp;&nbsp;No se encontraron resultados
+                                            <%}%>
+                                                <% for(var i=0; i < resultados.length; i++){%>
+                                                    <% if(resultados[i].publishedAt.includes(fecha)){ %>
+                                                        <!--row-->
+                                                        <div class="card col-md-4">
+                                                            <img src="<%= resultados[i].urlToImage %>"
+                                                                class="card-img-top" height="150px" alt="...">
+                                                            <div class="card-body">
+                                                                <h6 class="card-title">
+                                                                    <b>
+                                                                        <%= resultados[i].title %>
+                                                                    </b>
+                                                                </h6>
+                                                                <p class="card-text">
+                                                                    <%= resultados[i].description %>
+                                                                </p>
+                                                                <input type="hidden" name="hdTitle_<%=i%>"
+                                                                    id="hdTitle_<%=i%>"
+                                                                    value="<%= resultados[i].title %>">
+                                                                <input type="hidden" name="hdUrl_<%=i%>"
+                                                                    id="hdUrl_<%=i%>" value="<%= resultados[i].url %>">
+                                                                <input type="hidden" name="hdPublishedAt_<%=i%>"
+                                                                    id="hdPublishedAt_<%=i%>"
+                                                                    value="<%= resultados[i].publishedAt %>">
+                                                                <input type="hidden" name="hdDescription_<%=i%>"
+                                                                    id="hdDescription_<%=i%>"
+                                                                    value="<%= resultados[i].description %>">
+                                                                <input type="hidden" name="hdContent_<%=i%>"
+                                                                    id="hdContent_<%=i%>"
+                                                                    value="<%= resultados[i].content %>">
+                                                            </div>
+                                                            <div class="card-footer">
+                                                                <div id="divBtnDescarga_<%=i%>">
+                                                                    <a class="btn btn-primary btn-sm" target="_blank"
+                                                                        href="<%= resultados[i].url %>">Ver noticia</a>
+
+                                                                        &nbsp;&nbsp;
+                                                                    <a class="btn btn-warning btn-sm"
+                                                                        style="color: white;" id="<%=i%>"
+                                                                        onclick="enviarBoton(this)">Descargar</a>
+                                                                </div>
+                                                                <div id="divBtnCarga_<%=i%>" style="display: none;">
+                                                                    <a class="btn btn-primary btn-sm" target="_blank"
+                                                                        href="<%= resultados[i].url %>">Ver noticia</a>
+                                                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                    <div class="spinner-border text-primary"
+                                                                        role="status">
+                                                                        <span class="visually-hidden">Loading...</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <% } } %>
+                                                            <!--End row-->
+                                    </div>
                                 </div>
-                                <div class="mb-3" id="idEnvioCorreo" style="display: none;">
-                                    <label for="frmCorreo" class="form-label">Ingresa el correo</label>
-                                    <input type="email" class="form-control" id="txtCorreo"
-                                        placeholder="name@example.com">
-                                </div>
-                                <div class="mb-3 text-center">
-                                    <button type="button" class="btn btn-primary"
-                                        onclick="descargarArchivos();">Aceptar</button>
-                                </div>
+                                <!--   </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>

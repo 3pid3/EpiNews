@@ -14,7 +14,8 @@
                 <form method="post" action="/downloadFile">
                   <div class="mb-3">
                     <label for="formControlPais" class="form-label">País</label>
-                    <select class="form-select" name="selectPais" id="selectPais" aria-label="Default select example" onchange="cambiarPais(this.value);">
+                    <select class="form-select" name="selectPais" id="selectPais" aria-label="Default select example"
+                      onchange="cambiarPais(this.value);">
                       <option value="">Todos los paises</option>
                       <option value="de">Alemania</option>
                       <option value="sa">Arabia Saudita</option>
@@ -75,7 +76,8 @@
                   </div>
                   <div class="mb-3">
                     <label for="formControlIdioma" class="form-label">Idioma</label>
-                    <select class="form-select" name="selectIdioma" id="selectIdioma" aria-label="Default select example" onchange="cambiarIdioma();">
+                    <select class="form-select" name="selectIdioma" id="selectIdioma"
+                      aria-label="Default select example" onchange="cambiarIdioma();">
                       <option value="">Todos los idiomas</option>
                       <option value="de">Alemán</option>
                       <option value="ar">Árabe</option>
@@ -95,7 +97,8 @@
                   </div>
                   <div class="mb-3">
                     <label for="formControlCategoria" class="form-label">Categoría</label>
-                    <select class="form-select" name="selectCategoria" id="selectCategoria" aria-label="Default select example" onchange="cambiarCategoria();">
+                    <select class="form-select" name="selectCategoria" id="selectCategoria"
+                      aria-label="Default select example" onchange="cambiarCategoria();">
                       <option value="">Todas las categorias</option>
                       <option value="science">Ciencia</option>
                       <option value="sports">Deportes</option>
@@ -112,14 +115,14 @@
                     <input type="text" name="txtPalabra" class="form-control" id="formControlPalabra">
                   </div>
                   <div class="mb-3 text-center">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" id="btnEnviar"
+                      onclick="this.form.submit(); this.disabled = true; ">
                       Buscar
                     </button>
                   </div>
                 </form>
               </div>
             </div>
-           
           </div>
         </div>
       </div>
