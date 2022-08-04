@@ -230,8 +230,8 @@ router.post('/downloadFiles', function (req, res, next) {
 
 //************************Funcion para crear documento********************************** */
 function generarDocumento() {
-  console.log("arreglo------------------------------------------------------------------------------");
-  console.log(array);
+ //console.log("arreglo------------------------------------------------------------------------------");
+ // console.log(array);
   const doc = new Document({
     sections: [
       {
