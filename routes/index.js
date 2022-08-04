@@ -101,7 +101,7 @@ router.post('/downloadFile', function (req, res, next) {
             createParagraphTitle(tituloFile),
             createParagraphUrl(urlFile),
             createParagraphFecha(fechaFile),
-            createParagraphResumen(article.textContent.trim().slice(0, 150)),
+            createParagraphResumen(article.textContent.trim().slice(0, 150) + "..."),
             createParagraphContenido(article.textContent.trim()),
 
           ],
