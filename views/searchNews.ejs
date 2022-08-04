@@ -67,6 +67,7 @@
                                             &nbsp;&nbsp;&nbsp;No se encontraron resultados
                                             <%}else{ for(var i=0; i < resultados.length; i++){
                                                 if(resultados[i].pubDate.includes(fecha)){ 
+                                                    
                                                     direcciones = direcciones +"_;_"+ resultados[i].link; 
                                                 titulos = titulos+ "_;_" + resultados[i].title; %>
                                                 <div class="card col-md-4">

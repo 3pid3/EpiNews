@@ -189,6 +189,7 @@ router.post('/downloadFiles', function (req, res, next) {
   datosTitulo = req.body.titulos.split('_;_');
   let firstResult;
   let encabezado;
+  array = [];
 
   for (let i = 0; i < datos.length; i++) {
     firstResult = datos[i];
