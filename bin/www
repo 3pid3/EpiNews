@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('newsv1.0:server');
+var debug = require('debug')('newsepi:server');
 var http = require('http');
 
 /**

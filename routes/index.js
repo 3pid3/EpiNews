@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+let googleNewsAPI = require('google-news-json');
+
 const fs = require('fs');
 const pkg = require('docx');
 const { Document, Packer, Paragraph, TextRun, AlignmentType, HeadingLevel } = pkg;
@@ -10,32 +12,71 @@ const axios = require('axios');
 const { JSDOM } = require('jsdom');
 const { Readability } = require('@mozilla/readability');
 
-const toDay = new Date();
-const fechaN = toDay.toLocaleString("es-MX", { year: 'numeric', month: '2-digit', day: '2-digit', timeZone: "America/Monterrey" });
-const fechaNu = fechaN.split(/[-/]/).reverse().join("-");
-
-var fechaActual = fechaNu;
-
-let titulo;
-
 var array = [];
 var resultado = [];
-var consulta = "";
-var pais = "", idioma = "", categoria = "", texto = "";
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
-  res.render('index', { title: 'News' });
+  res.render('index', { title: 'Epi - News' });
 });
 
-//ruta para editar
-router.post('/downloadNew', function (req, res, next) {
+router.get('/searchNews', function (req, res, next) {
+  res.render('searchNews', { title: 'Epi - Buscador' });
+});
+
+/*---------- POST searchNews -----------------------------------------------*/
+router.post('/searchNews', function (req, res, next) {
+  //asignamos la busqueda para el idioma seleccionado
+  const language = req.body.selectIdioma;
+
+  //validar la busqueda y concatenar en caso de que sea necesario
+  let busqueda = "Salud";
+  //si tiene categoria pero no tiene palabra busco por la categoria
+  if (req.body.selectCategoria != "" && req.body.txtPalabra == "") {
+    busqueda = req.body.selectCategoria;
+  } else if (req.body.selectCategoria == "" && req.body.txtPalabra != "") {
+    //si no tiene categoria pero tiene palabra busco por la palabra
+    busqueda = req.body.txtPalabra;
+  } else if (req.body.selectCategoria != "" && req.body.txtPalabra != "") {
+    //si tiene palabra y categoria busco por las dos (salud: covid)
+    busqueda = req.body.selectCategoria + ": " + req.body.txtPalabra;
+  } else {
+    //si no tiene categoria ni palabra por default muestra salud
+    busqueda = "salud";
+  }
+
+  console.log(busqueda);
+  // const buscador = req.body.
+  console.log(req.body);
+  //res.send(req.body);
+  googleNewsAPI.getNews(googleNewsAPI.SEARCH, busqueda, language, (err, response) => {
+    //res.send(response.items);
+    //res.send(response.items[0].title);
+    //ciclo for para mostrar las noticias del dia de hoy
+    resultado = response.items;
+    //enviar a la siguiente pagina
+    const toDay = new Date();
+    const fecha = toDay.toLocaleDateString('en-us', { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', timeZone: "America/Monterrey" })
+    const fecha2 = fecha.replaceAll(',', '').split(' ');
+    const fechaActual = fecha2[0] + ", " + fecha2[2] + " " + fecha2[1] + " " + fecha2[3];
+
+    // console.log(response.items);
+    res.render('searchNews', { title: 'Epi - Buscador', opIdioma: req.body.opIdioma, opCategoria: req.body.selectCategoria, opTexto: req.body.txtPalabra, resultados: resultado, fecha: fechaActual });
+  });
+  //
+});
+
+/*----------END POST searchNews -----------------------------------------------*/
+
+/*---------- POST downloadFile -----------------------------------------------*/
+router.post('/downloadFile', function (req, res, next) {
+  //console.log(req.body);
+  //crear el archivo
+
   //console.log(req.body);
   const tituloFile = req.body.titulo;
   const urlFile = req.body.url;
   const fechaFile = req.body.fecha;
-  const descripcionFile = req.body.descripcion;
-  const contenidoFile = req.body.contenido;
-
 
   //// ...and download the HTML for it, again with axios
   axios.get(urlFile).then(function (r2) {
@@ -50,28 +91,27 @@ router.post('/downloadNew', function (req, res, next) {
     //create the file
     //console.log(article.textContent.trim());
 
-    
+
     const doc = new Document({
       sections: [
         {
           properties: {},
           children: [
-           
+
             createParagraphTitle(tituloFile),
             createParagraphUrl(urlFile),
             createParagraphFecha(fechaFile),
-            createParagraphDescripcion(descripcionFile),
-            createParagraphResumen(contenidoFile),
+            createParagraphResumen(article.textContent.trim().slice(0, 150)),
             createParagraphContenido(article.textContent.trim()),
-              
+
           ],
         },
       ],
     });
-  
+
     // Used to export the file into a .docx file
     Packer.toBuffer(doc).then((buffer) => {
-  
+
       try {
         if (!fs.existsSync('public/files')) {
           console.log("no existe");
@@ -81,11 +121,11 @@ router.post('/downloadNew', function (req, res, next) {
         }
         fs.writeFileSync("public/files/New.docx", buffer);
       } catch (err) {
-  
+
         console.log(err);
       }
-  
-  
+
+
     });
 
 
@@ -100,21 +140,20 @@ router.post('/downloadNew', function (req, res, next) {
         {
           properties: {},
           children: [
-           
+
             createParagraphTitle(tituloFile),
             createParagraphUrl(urlFile),
             createParagraphFecha(fechaFile),
-            createParagraphDescripcion(descripcionFile),
-            createParagraphResumen(contenidoFile),
-              
+            createParagraphResumen(""),
+
           ],
         },
       ],
     });
-  
+
     // Used to export the file into a .docx file
     Packer.toBuffer(doc).then((buffer) => {
-  
+
       try {
         if (!fs.existsSync('public/files')) {
           console.log("no existe");
@@ -124,118 +163,75 @@ router.post('/downloadNew', function (req, res, next) {
         }
         fs.writeFileSync("public/files/New.docx", buffer);
       } catch (err) {
-  
+
         console.log(err);
       }
-  
-  
-    });
 
-    
+
+    });
 
     //--------------------------------------------------------------------------------------------------
 
   })
 
-
-  //----------------------------------------------------------------------------------------------
-
   res.send("creado");
 });
+/*----------END POST downloadFile -----------------------------------------------*/
 
-router.get('/downloadFile', function (req, res, next) {
-  res.render('downloadFile', {
-    title: 'Download', opPais: pais, opIdioma: idioma, opCategoria:
-      categoria, opTexto: texto, resultados: resultado, fecha: fechaActual
-  });
+/****************************POST downloadFiles************************************************************** */
+
+router.post('/downloadFiles', function (req, res, next) {
+  //console.log(req.body);
+  //console.log(req.body.url);
+  var datos = [];
+  datos = req.body.url.split('_;_');
+  var datosTitulo = [];
+  datosTitulo = req.body.titulos.split('_;_');
+  let firstResult;
+  let encabezado;
+
+  for (let i = 0; i < datos.length; i++) {
+    firstResult = datos[i];
+    encabezado = datosTitulo[i];
+
+    axios.get(firstResult).then(function (r2) {
+      //// We now have the article HTML, but before we can use Readability to locate the article content we need jsdom to convert it into a DOM object
+      let dom = new JSDOM(r2.data, {
+        url: firstResult
+      });
+
+      //// now pass the DOM document into readability to parse
+      let article = new Readability(dom.window.document).parse();
+      // we create a array with all information
+      titulo = {
+        'titulo': datosTitulo[i], 'url': datos[i], 'fecha': req.body.fecha,
+        'resumen': article.textContent.trim().slice(0, 150) + "...", 'contenido': article.textContent.trim()
+      };
+
+      array.push(titulo);
+      //console.log(array);
+      //console.log("ingreso");
+    }).catch(function (error) {
+      titulo = {
+        'titulo': datosTitulo[i], 'url': datos[i], 'fecha': req.body.fecha,
+        'resumen': "", 'contenido': 'ERROR_LOG ' + error
+      };
+
+    })
+  }
+
+  setTimeout(generarDocumento, 30000);
+
+  //console.log(array.length);
+  res.send("noticas creadas");
 });
 
-router.post('/downloadFile', function (req, res) {
-  //res.send(req.body);
-  array = [];
-  console.log(req.body);
-  pais = req.body.opPais;
-  idioma = req.body.opIdioma;
-  categoria = req.body.opCategoria;
-  texto = req.body.txtPalabra;
+/****************************END POST downloadFiles************************************************************** */
 
-  if (req.body.selectPais != "") {
-    consulta = "&country=" + req.body.selectPais;
-  }
-
-  if (req.body.selectIdioma != "") {
-    consulta += "&language=" + req.body.selectIdioma;
-  }
-
-  if (req.body.selectCategoria != "") {
-    consulta += "&category=" + req.body.selectCategoria;
-  }
-
-  if (req.body.txtPalabra != "") {
-    consulta += "&q=" + req.body.txtPalabra;
-  }
-
-  let url = 'https://newsapi.org/v2/top-headlines?pageSize=100' + consulta + '&apiKey=b7767b490e2b4184bd68896e9ddc92af';
-
-  console.log(url);
-  // Make the request with axios' get() function
-  axios.get(url).then(function (r1) {
-    resultado = r1.data.articles;
-    //console.log(r1.data.articles);
-
-    let firstResult;
-
-    for (let i = 0; i < r1.data.articles.length; i++) {
-      //console.log(r1.data.articles[i]['publishedAt']);
-      fecha = r1.data.articles[i]['publishedAt'].split('T');
-      //console.log(fechaActual +" == "+fecha[0]);
-      if (fechaActual == fecha[0]) {
-        //console.log("ingreso");
-        // At this point we will have some search results from the API. Take the first search result...
-        firstResult = r1.data.articles[i];
-
-        //// ...and download the HTML for it, again with axios
-        axios.get(firstResult.url).then(function (r2) {
-          //// We now have the article HTML, but before we can use Readability to locate the article content we need jsdom to convert it into a DOM object
-          let dom = new JSDOM(r2.data, {
-            url: firstResult.url
-          });
-
-          //// now pass the DOM document into readability to parse
-          let article = new Readability(dom.window.document).parse();
-          // we create a array with all information
-          titulo = {
-            'titulo': r1.data.articles[i]['title'], 'url': r1.data.articles[i]['url'], 'fecha': r1.data.articles[i]['publishedAt'],
-            'descripcion': r1.data.articles[i]['description'], 'resumen': r1.data.articles[i]['content'], 'contenido': article.textContent.trim()
-          };
-          array.push(titulo);
-        }).catch(function (error) {
-          titulo = {
-            'titulo': r1.data.articles[i]['title'], 'url': r1.data.articles[i]['url'], 'fecha': r1.data.articles[i]['publishedAt'],
-            'descripcion': r1.data.articles[i]['description'], 'resumen': r1.data.articles[i]['content'], 'contenido': 'ERROR_LOG ' + error
-          };
-          array.push(titulo);
-        })
-      }
-    }
-
-    setTimeout(mostrar, 30000);
-  }).catch(function (error) {
-    console.log("Error_log");
-  })
-
-  //res.redirect('/downloadFile');
-
-  setTimeout(function () {
-    // after 10 seconds
-    res.redirect('/downloadFile');
-  }, 10000)
-});
-
-module.exports = router;
-
-function mostrar() {
-  // Documents contain sections, you can have multiple sections per document
+//************************Funcion para crear documento********************************** */
+function generarDocumento() {
+  console.log("arreglo------------------------------------------------------------------------------");
+  console.log(array);
   const doc = new Document({
     sections: [
       {
@@ -247,7 +243,6 @@ function mostrar() {
             arr.push(createParagraphTitle(artl.titulo));
             arr.push(createParagraphUrl(artl.url));
             arr.push(createParagraphFecha(artl.fecha));
-            arr.push(createParagraphDescripcion(artl.descripcion));
             arr.push(createParagraphResumen(artl.resumen));
             arr.push(createParagraphContenido(artl.contenido));
 
@@ -278,6 +273,8 @@ function mostrar() {
 
   });
 }
+
+//**********************END funcion para crear documento****************************************************** */
 
 //functions to add a new paragraph
 function createParagraphTitle(encabezado) {
@@ -323,21 +320,6 @@ function createParagraphFecha(fecha) {
   });
 }
 
-function createParagraphDescripcion(descripcion) {
-  return new Paragraph({
-    children: [
-      new TextRun({
-        text: "DESCRIPCIÓN: ",
-        bold: true,
-      }),
-      new TextRun({
-        text: descripcion,
-      }),
-    ],
-    alignment: AlignmentType.JUSTIFIED,
-  });
-}
-
 function createParagraphResumen(resumen) {
   return new Paragraph({
     children: [
@@ -367,3 +349,6 @@ function createParagraphContenido(contenido) {
     alignment: AlignmentType.JUSTIFIED,
   });
 }
+
+
+module.exports = router;

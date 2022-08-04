@@ -1,5 +1,5 @@
 {
-  "name": "newsv1.0",
+  "name": "newsepi",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -13,6 +13,7 @@
     "docx": "^7.4.1",
     "ejs": "~2.6.1",
     "express": "~4.16.1",
+    "google-news-json": "^2.1.0",
     "http-errors": "~1.6.3",
     "jsdom": "^20.0.0",
     "morgan": "~1.9.1"
