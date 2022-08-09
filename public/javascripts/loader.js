@@ -5,6 +5,12 @@ function mostrarCarga() {
     //document.getElementById("divContenido").style.display = 'block';
 }
 
+function cambiarIdioma(){
+    var select = document.getElementById("selectIdioma"), //El <select>
+        value = select.value, //El valor seleccionado
+        text = select.options[select.selectedIndex].innerText; //El texto de la opción seleccionada 
+    document.getElementById("opIdioma").value = text;
+}
 
 function enviarBoton(valor) {
     var id = valor.id;

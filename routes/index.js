@@ -45,21 +45,43 @@ router.post('/searchNews', function (req, res, next) {
     busqueda = "salud";
   }
 
-  console.log(busqueda);
+  //console.log(busqueda);
   // const buscador = req.body.
-  console.log(req.body);
+  //console.log(req.body);
   //res.send(req.body);
   googleNewsAPI.getNews(googleNewsAPI.SEARCH, busqueda, language, (err, response) => {
     //res.send(response.items);
     //res.send(response.items[0].title);
     //ciclo for para mostrar las noticias del dia de hoy
     resultado = response.items;
+   //console.log(resultado);
+    //console.log(response.items);
     //enviar a la siguiente pagina
     const toDay = new Date();
     const fecha = toDay.toLocaleDateString('en-us', { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', timeZone: "America/Monterrey" })
     const fecha2 = fecha.replaceAll(',', '').split(' ');
     const fechaActual = fecha2[0] + ", " + fecha2[2] + " " + fecha2[1] + " " + fecha2[3];
 
+    //separar solo por la fecha del dia de hoy y realizar otro arreglo con la nueva informacion
+    console.log(fechaActual);
+    var resultados = [];
+    // titulo = {
+    //   'titulo': datosTitulo[i], 'url': datos[i], 'fecha': req.body.fecha,
+    //   'resumen': article.textContent.trim().slice(0, 150) + "...", 'contenido': article.textContent.trim()
+    // };
+
+    // array.push(titulo);
+
+    //ciclo for para recorrer el arreglo
+    for (var i = 0; i < resultado.length; i++) {
+
+      //console.log(resultado[i].pubDate);
+      if (resultado[i].pubDate.includes(fechaActual)) {
+        //console.log("ingreso----------");
+      }else{
+        //console.log("no ingreso");
+      }
+    }
     // console.log(response.items);
     res.render('searchNews', { title: 'Epi - Buscador', opIdioma: req.body.opIdioma, opCategoria: req.body.selectCategoria, opTexto: req.body.txtPalabra, resultados: resultado, fecha: fechaActual });
   });
@@ -231,8 +253,8 @@ router.post('/downloadFiles', function (req, res, next) {
 
 //************************Funcion para crear documento********************************** */
 function generarDocumento() {
- //console.log("arreglo------------------------------------------------------------------------------");
- // console.log(array);
+  //console.log("arreglo------------------------------------------------------------------------------");
+  // console.log(array);
   const doc = new Document({
     sections: [
       {
