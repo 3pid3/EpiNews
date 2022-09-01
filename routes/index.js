@@ -31,58 +31,63 @@ router.post('/searchNews', function (req, res, next) {
 
   //validar la busqueda y concatenar en caso de que sea necesario
   let busqueda = "Salud";
-  //si tiene categoria pero no tiene palabra busco por la categoria
-  if (req.body.selectCategoria != "" && req.body.txtPalabra == "") {
-    busqueda = req.body.selectCategoria;
-  } else if (req.body.selectCategoria == "" && req.body.txtPalabra != "") {
-    //si no tiene categoria pero tiene palabra busco por la palabra
-    busqueda = req.body.txtPalabra;
-  } else if (req.body.selectCategoria != "" && req.body.txtPalabra != "") {
-    //si tiene palabra y categoria busco por las dos (salud: covid)
-    busqueda = req.body.selectCategoria + ": " + req.body.txtPalabra;
-  } else {
-    //si no tiene categoria ni palabra por default muestra salud
-    busqueda = "salud";
+  let categoria = req.body.selectCategoria;
+
+  //revisar el lenguaje del formulario
+  if (language == "en-GB") {
+    switch (categoria) {
+      case "Ciencia":
+        categoria = "Science";
+        break;
+      case "Deportes":
+        categoria = "Sports";
+        break;
+      case "Entretenimiento":
+        categoria = "Entertainment";
+        break;
+      case "General":
+        categoria = "General";
+        break;
+      case "Negocios":
+        categoria = "Business";
+        break;
+      case "Salud":
+        categoria = "Health";
+        break;
+      case "Tecnología":
+        categoria = "Technology";
+        break;
+      default:
+        categoria = "Health";
+        break;
+    }
   }
 
-  //console.log(busqueda);
-  // const buscador = req.body.
-  //console.log(req.body);
-  //res.send(req.body);
+  //si tiene categoria pero no tiene palabra busco por la categoria
+  if (categoria != "" && req.body.txtPalabra == "") {
+    busqueda = categoria;
+  } else if (categoria == "" && req.body.txtPalabra != "") {
+    //si no tiene categoria pero tiene palabra busco por la palabra
+    busqueda = req.body.txtPalabra;
+  } else if (categoria != "" && req.body.txtPalabra != "") {
+    //si tiene palabra y categoria busco por las dos (salud: covid)
+    busqueda = categoria + ": " + req.body.txtPalabra;
+  } else {
+    //si no tiene categoria ni palabra por default muestra salud
+    busqueda = categoria;
+  }
+
   googleNewsAPI.getNews(googleNewsAPI.SEARCH, busqueda, language, (err, response) => {
-    //res.send(response.items);
-    //res.send(response.items[0].title);
     //ciclo for para mostrar las noticias del dia de hoy
     resultado = response.items;
-   //console.log(resultado);
-    //console.log(response.items);
     //enviar a la siguiente pagina
     const toDay = new Date();
     const fecha = toDay.toLocaleDateString('en-us', { weekday: 'short', year: 'numeric', month: 'short', day: '2-digit', timeZone: "America/Monterrey" })
     const fecha2 = fecha.replaceAll(',', '').split(' ');
     const fechaActual = fecha2[0] + ", " + fecha2[2] + " " + fecha2[1] + " " + fecha2[3];
 
-    //separar solo por la fecha del dia de hoy y realizar otro arreglo con la nueva informacion
+    //separar solo por la fecha del dia de hoy y realizar otro arreglo con la nueva informacions
     console.log(fechaActual);
-    var resultados = [];
-    // titulo = {
-    //   'titulo': datosTitulo[i], 'url': datos[i], 'fecha': req.body.fecha,
-    //   'resumen': article.textContent.trim().slice(0, 150) + "...", 'contenido': article.textContent.trim()
-    // };
-
-    // array.push(titulo);
-
-    //ciclo for para recorrer el arreglo
-    for (var i = 0; i < resultado.length; i++) {
-
-      //console.log(resultado[i].pubDate);
-      if (resultado[i].pubDate.includes(fechaActual)) {
-        //console.log("ingreso----------");
-      }else{
-        //console.log("no ingreso");
-      }
-    }
-    // console.log(response.items);
     res.render('searchNews', { title: 'Epi - Buscador', opIdioma: req.body.opIdioma, opCategoria: req.body.selectCategoria, opTexto: req.body.txtPalabra, resultados: resultado, fecha: fechaActual });
   });
   //
@@ -149,12 +154,7 @@ router.post('/downloadFile', function (req, res, next) {
 
 
     });
-
-
-
-
   }).catch(function (error) {
-
     //-------------------------------------------------------------------------------------
     // Documents contain sections, you can have multiple sections per document
     const doc = new Document({
@@ -167,7 +167,6 @@ router.post('/downloadFile', function (req, res, next) {
             createParagraphUrl(urlFile),
             createParagraphFecha(fechaFile),
             createParagraphResumen(""),
-
           ],
         },
       ],
@@ -175,7 +174,6 @@ router.post('/downloadFile', function (req, res, next) {
 
     // Used to export the file into a .docx file
     Packer.toBuffer(doc).then((buffer) => {
-
       try {
         if (!fs.existsSync('public/files')) {
           console.log("no existe");
@@ -185,17 +183,11 @@ router.post('/downloadFile', function (req, res, next) {
         }
         fs.writeFileSync("public/files/New.docx", buffer);
       } catch (err) {
-
         console.log(err);
       }
-
-
     });
-
     //--------------------------------------------------------------------------------------------------
-
   })
-
   res.send("creado");
 });
 /*----------END POST downloadFile -----------------------------------------------*/
@@ -239,7 +231,6 @@ router.post('/downloadFiles', function (req, res, next) {
         'titulo': datosTitulo[i], 'url': datos[i], 'fecha': req.body.fecha,
         'resumen': "", 'contenido': 'ERROR_LOG ' + error
       };
-
     })
   }
 
@@ -292,8 +283,6 @@ function generarDocumento() {
 
       console.log(err);
     }
-
-
   });
 }
 
